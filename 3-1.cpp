@@ -23,14 +23,8 @@ int main()
 	int capacity = 0;
 	cin >> capacity; 
 	// cout << "capacity: " << capacity << endl;
-	vector<int> va{capacity};
-	list<int> la{capacity};
-
-	for (int i = 0; i < capacity; i++)
-	{
-		va.push_back(i);
-		la.push_back(i);
-	}
+	vector<int> va(capacity, 1);
+	list<int> la(capacity, 1);
 
 	clock_t startTimeL, endTimeL;
 	startTimeL = clock();
