@@ -99,6 +99,13 @@ private:
 	Object *objects;
 };
 
+template <typename Iterator, typename Object>
+Iterator find(Iterator start, Iterator end, const Object& x)
+{
+	for (Iterator iter = start; iter != end; iter++)
+			if (x == *iter) return iter;
+	return end;
+}
 
 int main()
 {
@@ -109,8 +116,17 @@ int main()
 	vi.push_back(8);
 	vi.push_back(-9);
 	vi.push_back(0);
-	for (int i = 0; i < vi.size(); i++)
-		cout << vi[i] << endl;
+	//for (int i = 0; i < vi.size(); i++)
+		//cout << vi[i] << endl;
+	Vector<int>::iterator viter;
+	cout << "what num you want find: ";
+	int num = 0;
+	cin >> num;
+	Vector<int>::iterator res = find(vi.begin(), vi.end(), num);
+	if (res == vi.end())
+		cout << "not find" << endl;
+	else 
+		cout << "find it" << endl;
 	return 0;
 }
 

@@ -151,6 +151,14 @@ private:
 	}
 };
 
+template <typename Iterator, typename Object>
+Iterator find(Iterator start, Iterator end, const Object& x)
+{
+	for (Iterator iter = start, iter != end; iter++)
+			if (x == *iter) return iter;
+	return end;
+}
+
 
 int main()
 {
