@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -56,10 +57,16 @@ public:
 	}
 
 	Object& operator[](int index)
-	{ return objects[index]; }
+	{ 
+		if (index > theSize || index < 0) throw -1;
+		return objects[index]; 
+	}
 
 	const Object& operator[](int index) const
-	{ return objects[index]; }
+	{ 
+		if (index > theSize || index < 0) throw -1;
+		return objects[index]; 
+	}
 
 	bool empty() const
 	{ return (size() == 0); }
