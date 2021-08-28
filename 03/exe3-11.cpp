@@ -15,8 +15,9 @@ private:
 	int size;
 	void insert(Node<Object>*, const Object&);
 	void erase(Node<Object>*);
+	Node<Object>* current;
 public:
-	List() : size{0} { ListHead = new Node<Object>; ListHead->next = nullptr; }
+	List() : size{0} { ListHead = new Node<Object>; ListHead->next = nullptr; current = ListHead->next; }
 	~List() 
 	{ 
 		while (ListHead)
@@ -88,8 +89,10 @@ int List<Object>::getSize() const
 }
 
 template <typename Object>
-List<Object>& operator++()
+List<Object>& List<Object>::operator++()
 {
+	if (ListHead->next && !current) current = nullptr;
+	if (!(ListHead->next)) 
 	return *this;
 }
 
