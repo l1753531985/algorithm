@@ -30,8 +30,6 @@ public:
 	void find(const Object&);
 	void print(ostream&);
 	int getSize() const;
-	List<Object>& operator++();
-	List<Object> operator++(int);
 };
 
 template <typename Object>
@@ -86,20 +84,6 @@ template <typename Object>
 int List<Object>::getSize() const
 {
 	return size;
-}
-
-template <typename Object>
-List<Object>& List<Object>::operator++()
-{
-	if (ListHead->next && !current) current = nullptr;
-	if (!(ListHead->next)) 
-	return *this;
-}
-
-template <typename Object>
-List<Object> operator++(int)
-{
-	return this
 }
 
 int main()
