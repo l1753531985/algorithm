@@ -1,7 +1,12 @@
 #include <stack>
+#include <iostream>
 #include <sstream>
+#include <string>
+#include <unordered_map>
 
-enum Priority {FIRST, SECOND, THIRD};
+using namespace std;
+
+enum Priority {FIRST, SECOND, THIRD, ZERO};
 
 class FixConvert {
 private:
