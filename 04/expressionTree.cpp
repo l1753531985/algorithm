@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 #include <sstream>
 
 using namespace std;
@@ -10,56 +11,41 @@ struct Node {
 	Node<Object>* right;
 };
 
-typename <typename Object>
-class Tree {
-private:
-	Node<Object>* TreeHead;
-public:
-	Tree();
-	~Tree();
-	void insertLeft(Node<Object>* );
-	void insertRight(const Object&);
-	void erase(Node<Object>*);
-};
-
-typename <typename Object>
-Tree<Object>::Tree()
+void createExpressionTree(string expression, stack<Node<string>*>& dataStore)
 {
-	TreeHead = new Node;
-	TreeHead->left = nullptr;
-	TreeHead->right = nullptr;
+	stringstream data{expression};	
+	char singleExpression;
+	while (data >> singleExpression)
+	{
+		string tmp = "";
+		tmp.push_back(singleExpression);
+		Node<string>* n = new Node<string>;
+		n->data = tmp;
+		if (ispunct(singleExpression))
+		{
+			n->right = dataStore.top();
+			dataStore.pop();
+			n->left = dataStore.top();
+			dataStore.pop();
+		}
+		dataStore.push(n);
+	}
 }
 
-typename <typename Object>
-Tree<Object>::~Tree()
+template <typename Object>
+void traverseTree(Node<Object>* node)
 {
-	erase(TreeHead);
-}
-
-typename <typename Object>
-void Tree<Object>::erase(Node<Object>* node)
-{
-	if (!node) return;
-	erase(node->left);
-	erase(node->right);
 	delete node;
-}
-
-typename <typename Object>
-void Tree<Object>::insert(const Object& value)
-{
-	
+	if (!node->left && !node->right) return;
+	traverseTree(node->left);
+	traverseTree(node->right);
 }
 
 int main()
 {
 	string expression = "a b + c d e + * *";
-	stringstream data{expression};	
-	string singleExpression = "";
-	while (data >> singleExpression)
-	{
-		cout << singleExpression << '\t';
-	}
-	cout << endl;
+	stack<Node<string>*> dataStore;
+	createExpressionTree(expression, dataStore);
+	traverseTree(dataStore.top());
 	return 0;
 }
