@@ -31,8 +31,8 @@ private:
 
 	BinaryNode* root;
 
-	void insert(const Comparable& x, BinaryNode*& t) const;
-	void remove(const Comparable& x, BinaryNode*& t) const;
+	void insert(const Comparable& x, BinaryNode*& t);
+	void remove(const Comparable& x, BinaryNode*& t);
 	BinaryNode* findMin(BinaryNode* t) const;
 	BinaryNode* findMax(BinaryNode* t) const;
 	bool contains(const Comparable& x, BinaryNode* t) const;
@@ -50,7 +50,7 @@ BinarySearchTree<Comparable>::BinarySearchTree()
 template <typename Comparable>
 BinarySearchTree<Comparable>::~BinarySearchTree()
 {
-	delete root;
+	makeEmpty();
 }
 
 template <typename Comparable>
@@ -110,6 +110,61 @@ void BinarySearchTree<Comparable>::insert(const Comparable& x, BinaryNode*& t)
 	else if (x < t->element) insert(x, t->left);
 	else if (x > t->element) insert(x, t->right);
 	else ;
+}
+
+template <typename Comparable>
+void BinarySearchTree<Comparable>::remove(const Comparable& x, BinaryNode*& t)
+{
+	if (!t) return;
+	if (x < t->element) remove(x,t->left);
+	else if (x > t->element) remove(x,t->right);
+	else if (t->left && t->right)
+	{
+		t->element = findMin(t->right)->element;
+		remove(t->element,t->right);
+	}
+	else
+	{
+		BinaryNode* oldNode = t;
+		t = (t->left) ? t->left : t->right;
+		delete oldNode;
+	}
+}
+
+template <typename Comparable>
+void BinarySearchTree<Comparable>::makeEmpty()
+{
+	makeEmpty(root);
+}
+
+template <typename Comparable>
+void BinarySearchTree<Comparable>::makeEmpty(BinaryNode*& t)
+{
+	if (!t)
+	{
+		makeEmpty(t->left);
+		makeEmpty(t->right);
+		delete t;
+	}
+	t = nullptr;
+}
+
+template <typename Comparable>
+const BinarySearchTree<Comparable>& BinarySearchTree<Comparable>::operator=(const BinarySearchTree& rhs)
+{
+	if (this != &rhs)
+	{
+		makeEmpty();
+		root = clone(rhs.root);
+	}
+	return *this;
+}
+
+template <typename Comparable>
+typename BinarySearchTree<Comparable>::BinaryNode* BinarySearchTree<Comparable>::clone(BinaryNode* t) const
+{
+	if (!t) return nullptr;
+	return new BinaryNode(t->element, clone(t->left), clone(t->right));
 }
 
 #endif
