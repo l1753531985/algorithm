@@ -1,9 +1,11 @@
-#include "Set.h"
+#include <iostream>
+#include <cstdlib>
+#include "BinarySearchTree.h"
 
 using namespace std;
 
 int main()
 {
-	Set<int> set;
+	BinarySearchTree<int> BiSearchTree;
 	return 0;
 }

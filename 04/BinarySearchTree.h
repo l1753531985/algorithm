@@ -1,6 +1,10 @@
 #ifndef __binarysearchtree__H
 #define __binarysearchtree__H
 
+#include <iostream>
+
+using namespace std;
+
 template <typename Comparable>
 class BinarySearchTree {
 public:
@@ -11,8 +15,9 @@ public:
 	const Comparable& findMin() const;
 	const Comparable& findMax() const;
 	bool contains(const Comparable& x) const;
-	bool isEmpty() const;
-	void printTree() const;
+	bool isEmpty() const
+	{ return (root == nullptr); }
+	void printTree(ostream& os) const;
 
 	void makeEmpty();
 	void insert(const Comparable& x);
@@ -37,7 +42,7 @@ private:
 	BinaryNode* findMax(BinaryNode* t) const;
 	bool contains(const Comparable& x, BinaryNode* t) const;
 	void makeEmpty(BinaryNode*& t);
-	void printTree(BinaryNode* t) const;
+	void printTree(ostream&, BinaryNode* t) const;
 	BinaryNode* clone(BinaryNode* t) const;
 };
 
@@ -50,6 +55,7 @@ BinarySearchTree<Comparable>::BinarySearchTree()
 template <typename Comparable>
 BinarySearchTree<Comparable>::~BinarySearchTree()
 {
+	cout << "in delete function !!!!!!!!!!!!!!!!!!!" << endl;
 	makeEmpty();
 }
 
@@ -87,11 +93,23 @@ bool BinarySearchTree<Comparable>::contains(const Comparable& x, BinaryNode* t) 
 }
 
 template <typename Comparable>
+const Comparable& BinarySearchTree<Comparable>::findMin() const
+{
+	return findMin(root)->element;
+}
+
+template <typename Comparable>
 typename BinarySearchTree<Comparable>::BinaryNode* BinarySearchTree<Comparable>::findMin(BinaryNode* t) const
 {
 	if (!t) return nullptr;
 	if (!t->left) return t;
 	findMin(t->left);
+}
+
+template <typename Comparable>
+const Comparable& BinarySearchTree<Comparable>::findMax() const
+{
+	return findMax(root)->element;
 }
 
 template <typename Comparable>
@@ -109,7 +127,7 @@ void BinarySearchTree<Comparable>::insert(const Comparable& x, BinaryNode*& t)
 	if (!t) t = new BinaryNode(x, nullptr, nullptr);
 	else if (x < t->element) insert(x, t->left);
 	else if (x > t->element) insert(x, t->right);
-	else ;
+	else;
 }
 
 template <typename Comparable>
@@ -140,7 +158,7 @@ void BinarySearchTree<Comparable>::makeEmpty()
 template <typename Comparable>
 void BinarySearchTree<Comparable>::makeEmpty(BinaryNode*& t)
 {
-	if (!t)
+	if (t)
 	{
 		makeEmpty(t->left);
 		makeEmpty(t->right);
@@ -154,7 +172,7 @@ const BinarySearchTree<Comparable>& BinarySearchTree<Comparable>::operator=(cons
 {
 	if (this != &rhs)
 	{
-		makeEmpty();
+		makeEmpty()
 		root = clone(rhs.root);
 	}
 	return *this;
@@ -165,6 +183,24 @@ typename BinarySearchTree<Comparable>::BinaryNode* BinarySearchTree<Comparable>:
 {
 	if (!t) return nullptr;
 	return new BinaryNode(t->element, clone(t->left), clone(t->right));
+}
+
+template <typename Comparable>
+void BinarySearchTree<Comparable>::printTree(ostream& os) const
+{
+	printTree(os, root);
+}
+
+template <typename Comparable>
+void BinarySearchTree<Comparable>::printTree(ostream& os, BinaryNode* t) const
+{
+	if (t)
+	{
+		printTree(os, t->left);
+		os << t->element << '\t';
+		printTree(os, t->right);
+	}
+	cout << "\n";
 }
 
 #endif
