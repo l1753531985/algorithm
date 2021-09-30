@@ -55,7 +55,6 @@ BinarySearchTree<Comparable>::BinarySearchTree()
 template <typename Comparable>
 BinarySearchTree<Comparable>::~BinarySearchTree()
 {
-	cout << "in delete function !!!!!!!!!!!!!!!!!!!" << endl;
 	makeEmpty();
 }
 
@@ -172,7 +171,7 @@ const BinarySearchTree<Comparable>& BinarySearchTree<Comparable>::operator=(cons
 {
 	if (this != &rhs)
 	{
-		makeEmpty()
+		makeEmpty();
 		root = clone(rhs.root);
 	}
 	return *this;
