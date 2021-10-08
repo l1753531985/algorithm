@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
-#include "Set.h"
 #include <cstdlib>
+#include "Set.h"
 
 using namespace std;
 
@@ -17,7 +17,7 @@ int main()
 	}
 	set.printTree(cout);
 	int j = 0;
-	while (cin >> j) 
+	while (!set.isEmpty() && cin >> j) 
 	{
 		set.remove(j);
 		set.printTree(cout);

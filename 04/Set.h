@@ -29,6 +29,85 @@ private:
 	void printTree(ostream&, BinaryNode* t) const;
 	BinaryNode* clone(BinaryNode* t) const;
 public:
+	class const_iterator
+	{
+		public:
+			const_iterator() : current{nullptr} {}
+			const Comparable& operator*() const
+			{ return retrieve(); }
+			const_iterator& operator++()
+			{
+				current = current->right;
+				return *this;
+			}
+			const_iterator operator++(int)
+			{
+				const_iterator old = *this;
+				++(*this);
+				return old;
+			}
+			const_iterator& operator--()
+			{
+				current = current->left;
+				return *this;
+			}
+			const_iterator& operator--(int)
+			{
+				const_iterator old = *this;
+				--(*this);
+				return old;
+			}
+			bool operator==(const const_iterator& rhs)
+			{ return current == rhs.current; }
+			bool operator!=(const const_iterator& rhs)
+			{ return !(*this == rhs); }
+		protected:
+			BinaryNode* current;	
+			Comparable& retrieve() const
+			{ return current->element; }
+			const_iterator(BinaryNode* p)
+			{
+				current->element = p->element;
+				current->left = p->left;
+				current->right = p->right;
+			}
+			friend class Set<Comparable>;
+	};
+	class iterator : public const_iterator
+	{
+		public:
+			iterator() {}
+			Comparable& operator*()
+			{ return this->retrieve(); }
+			const Comparable& operator*() const 
+			{ return const_iterator::operator*(); }
+			iterator& operator++()
+			{ 
+				this->current = this->current->right;
+				return *this;
+			}
+			iterator operator++(int)
+			{
+				iterator old = *this;
+				++(*this);
+				return old;
+			}
+			iterator& operator--()
+			{
+				this->current = this->current->left;
+				return *this;
+			}
+			iterator& operator--(int)
+			{
+				iterator old = *this;
+				--(*this);
+				return old;
+			}
+		protected:	
+			iterator(BinaryNode* p) : const_iterator{p} {}
+			friend class Set<Comparable>;
+	};
+public:
 	Set();	
 	Set(const Set&);
 	~Set();
@@ -38,6 +117,15 @@ public:
 	void remove(const Comparable&);
 	const Comparable& findMax() const;
 	const Comparable& findMin() const;
+	bool isEmpty() const;
+	iterator begin()
+	{ return iterator(findMin(root)); }
+	const_iterator begin() const
+	{ return const_iterator(findMin(root)); }
+	iterator end()
+	{ return iterator(findMax(root)); }
+	const_iterator end() const
+	{ return const_iterator(findMax(root)); } 
 };
 
 template <typename Comparable>
@@ -160,5 +248,10 @@ const Comparable& Set<Comparable>::findMin() const
 	return *findMin(root);
 }
 
+template <typename Comparable>
+bool Set<Comparable>::isEmpty() const
+{
+	return (root == nullptr);
+}
 
 #endif
