@@ -16,11 +16,9 @@ int main()
 		set.insert(num);
 	}
 	set.printTree(cout);
-	int j = 0;
-	while (!set.isEmpty() && cin >> j) 
-	{
-		set.remove(j);
-		set.printTree(cout);
-	}
+	Set<int>::iterator iter; 
+	iter = set.begin();
+	for (; iter != set.end(); iter++)
+		cout << *iter << endl;
 	return 0;
 }

@@ -57,6 +57,11 @@ public:
 				--(*this);
 				return old;
 			}
+			const_iterator& operator=(const const_iterator& rhs)
+			{
+				current = rhs.current;
+				return *this;
+			}
 			bool operator==(const const_iterator& rhs)
 			{ return current == rhs.current; }
 			bool operator!=(const const_iterator& rhs)
@@ -67,9 +72,12 @@ public:
 			{ return current->element; }
 			const_iterator(BinaryNode* p)
 			{
-				current->element = p->element;
-				current->left = p->left;
-				current->right = p->right;
+				if (p)
+				{
+					current = p;
+					current->left = p->left;
+					current->right = p->right;
+				}
 			}
 			friend class Set<Comparable>;
 	};
@@ -102,6 +110,11 @@ public:
 				iterator old = *this;
 				--(*this);
 				return old;
+			}
+			iterator& operator=(const iterator& rhs)
+			{
+				this->current = rhs.current;
+				return *this;
 			}
 		protected:	
 			iterator(BinaryNode* p) : const_iterator{p} {}
@@ -231,7 +244,7 @@ typename Set<Comparable>::BinaryNode* Set<Comparable>::findMax(BinaryNode* t) co
 template <typename Comparable>
 const Comparable& Set<Comparable>::findMax() const
 {
-	return *findMax(root);
+	return findMax(root)->element;
 }
 
 template <typename Comparable>
@@ -245,7 +258,7 @@ typename Set<Comparable>::BinaryNode* Set<Comparable>::findMin(BinaryNode* t) co
 template <typename Comparable>
 const Comparable& Set<Comparable>::findMin() const
 {
-	return *findMin(root);
+	return findMin(root)->element;
 }
 
 template <typename Comparable>
