@@ -44,6 +44,58 @@ private:
 	void makeEmpty(BinaryNode*& t);
 	void printTree(ostream&, BinaryNode* t) const;
 	BinaryNode* clone(BinaryNode* t) const;
+public:
+	class const_iterator 
+	{
+		public:		
+			const_iterator() : cuttent{nullptr} {}
+			const Object& operator*() const
+			{ return retrieve(); }
+			const_iterator& operator++()
+			{
+				cuttent = cuttent->next;
+				return *this;
+			}
+			const_iterator operator++(int)
+			{
+				const_iterator old = *this;
+				++(*this);
+				return old;
+			}
+			bool operator==(const const_iterator& rhs)
+			{ return cuttent == rhs.cuttent; }
+			bool operator!=(const const_iterator& rhs)
+			{ return !(*this == rhs); }
+		protected:
+			Node* current;
+			Object& retrieve() const
+			{ return current->data; }
+			const_iterator(Node* p) : current{p} {}
+			friend class Set<Object>;
+	};
+	class iterator : public const_iterator
+	{
+		public:
+			iterator() {}	
+			Object& operator*()
+			{ return retrieve(); }
+			const Object& operator*() const
+			{ return const_iterator::operator*(); }
+			iterator& operator++()
+			{ 
+				current = current->next;
+				return *this;
+			}
+			iterator operator++(int)
+			{
+				iterator old = *this;
+				++(*this);
+				return old;
+			}
+		protected:
+			iterator(Node* p) : const_iterator{p} {}
+			friend class Set<Object>;
+	};
 };
 
 template <typename Comparable>
