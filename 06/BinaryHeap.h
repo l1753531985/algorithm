@@ -2,6 +2,7 @@
 #define _BINARYHEAP_H_
 
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -17,6 +18,8 @@ public:
 	void deleteMin();
 	void deleteMin(Comparable&);
 	void makeEmpty();
+	const Comparable& getIndex0() const;
+	void printHeap(ostream&) const;
 private:
 	int currentSize;
 	vector<Comparable> array;
@@ -35,10 +38,10 @@ template <typename Comparable>
 BinaryHeap<Comparable>::BinaryHeap(const vector<Comparable>& items)
 	:currentSize{items.size()}
 {
-	if (currentSize < items.size()-1)
-		array.resize(items.size() * 2);
-	for (Comparable x : items)
-		array.push_back(x);
+	array.reserve(items.size() * 2); //allocate empty space
+	for (int i = 0; i < items.size(); i++)
+		array[i+1] = items[i];
+	buildHeap();
 }
 
 template <typename Comparable>
@@ -46,6 +49,8 @@ void BinaryHeap<Comparable>::insert(const Comparable& x)
 {
 	if (currentSize == array.size()-1) 	
 		array.resize(array.size() * 2); 
+
+	array[0] = x;
 
 	int hole = ++currentSize;
 	for (; hole > 1 && x < array[hole/2]; hole /= 2)
@@ -87,19 +92,40 @@ template <typename Comparable>
 void BinaryHeap<Comparable>::precolateDown(int hole)
 {
 	int child;  	
-	Comparable tmp = array[child];
+	Comparable tmp = array[hole];
 
 	for (; hole * 2 < currentSize; hole = child)
 	{
 		child = hole * 2;
-		if (child != currentSize && array[child] < array[child+1])	
+		if (child != currentSize && array[child+1] < array[child])	
 			child++;
-		if (array[child] < array[hole])
+		if (array[child] < tmp)
 			array[hole] = array[child];
 		else
 			break;
 	}
 	array[hole] = tmp;
+}
+
+template <typename Comparable>
+const Comparable& BinaryHeap<Comparable>::getIndex0() const
+{
+	return array[0];
+}
+
+template <typename Comparable>
+void BinaryHeap<Comparable>::buildHeap()
+{
+	for (int i = currentSize/2; i > 0; i--)
+		precolateDown(i);
+}
+
+template <typename Comparable>
+void BinaryHeap<Comparable>::printHeap(ostream& os) const
+{
+	for (int i = 1; i < currentSize; i++)
+		os << array[i] << '\t';
+	os << '\n';
 }
 
 #endif
