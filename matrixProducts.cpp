@@ -15,7 +15,7 @@ private:
 	unordered_map<string,matrixInfo> matricesInfo;
 	vector<int> matricsData;
 	void getColVector(string name, int colIndex, vector<int>& colVector);
-	void setColVector(string name, int colIndex, int coff);
+	void setColVector(string src, string res, int colIndex, int coff);
 	void matrixProducts(string matrixA, string matrixB);	
 public:
 	explicit MatrixArithemtic(){};
@@ -65,28 +65,29 @@ void MatrixArithemtic::getColVector(string name, int colIndex, vector<int>& colV
 	}
 }
 
-void MatrixArithemtic::setColVector(string name, int colIndex, int coff)
+void MatrixArithemtic::setColVector(string src, string res, int colIndex, int coff)
 {
-	matrixInfo m = matricesInfo[name];
-	for (int rowIndex = 0; rowIndex < m.row; rowIndex++)
+	matrixInfo s = matricesInfo[src];
+	matrixInfo r = matricesInfo[res];
+	for (int rowIndex = 0; rowIndex < r.row; rowIndex++)
 	{
-		int elem = m.startIndex + rowIndex*(m.col)  + colIndex;	 
-		matricsData[elem] *= coff;
+		int elemPostion = rowIndex*(s.col)  + colIndex;	 
+		matricsData[r.startIndex+elemPostion] = matricsData[s.startIndex+elemPostion] * coff;
 	}
 }
 
 void MatrixArithemtic::matrixProducts(string matrixA, string matrixB)	
 {
-	// copy matrixA into matrix result
-	vector<int> res;
-	matrixInfo mia = matricesInfo[matrixA];
-	for (int i = mia.startIndex; i < mia.startIndex+(mia.col*mia.row); i++)
-		res.push_back(matricsData[i]);
-
 	// add result matrix into matrices data and info
 	string resName = matrixA+matrixB;
 	matrixInfo mib = matricesInfo[matrixB];
+	matrixInfo mia = matricesInfo[matrixA];
+	vector<int> res(mia.row*mib.col);
 	addMatrix(res, mia.row, mib.col, resName);
+
+	// copy matrix A into matrix result
+	for (int i = 0; i < mia.col*mia.row; i++)
+		matricesData[] = matricsData[i];
 
 	// split matrixA into column space multiple the column space of matrixB  
 	for (int i = 0; i < mib.col; i++)
@@ -95,7 +96,9 @@ void MatrixArithemtic::matrixProducts(string matrixA, string matrixB)
 		getColVector(matrixB, i, colVector);
 		for (int j = 0; j < colVector.size(); j++)
 			if (colVector[j])
-				setColVector(resName, j, colVector[j]);
+			{
+				setColVector(matrixA, resName, i, colVector[j]);
+			}
 	}
 }
 
